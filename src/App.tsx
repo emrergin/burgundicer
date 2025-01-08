@@ -89,7 +89,7 @@ function App() {
           .map((c, index) => generateCellImage(c, index))}
       </div>
       <div className="footer">
-        <a href="https://github.com/emrergin/oregon" target="_blank">
+        <a href="https://github.com/emrergin/burgundicer" target="_blank">
           Source code
         </a>
       </div>
