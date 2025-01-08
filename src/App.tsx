@@ -88,6 +88,11 @@ function App() {
           .filter((c) => c.r === 3)
           .map((c, index) => generateCellImage(c, index))}
       </div>
+      <div className="footer">
+        <a href="https://github.com/emrergin/oregon" target="_blank">
+          Source code
+        </a>
+      </div>
     </>
   );
 }
