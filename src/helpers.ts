@@ -103,7 +103,7 @@ export class MapCell {
     this.parent = null;
     this.name = `${r}|${s}|${q}`;
     if (!MapCell.nodeMap) {
-      MapCell.nodeMap = new Map<string, MapCell>();
+      throw new Error("No nodemap is set");
     }
     MapCell.nodeMap.set(`${r}|${s}|${q}`, this);
   }
@@ -143,6 +143,7 @@ export class MapCell {
 
 export function generateMap() {
   let duchyMap = [];
+  MapCell.nodeMap = new Map<string, MapCell>();
   while (true) {
     const randomizedTileList = shuffle(cellList);
     duchyMap = [];
