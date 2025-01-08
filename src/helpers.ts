@@ -83,7 +83,7 @@ export class MapCell {
   size: number;
   parent: null | MapCell;
   name: string;
-  nodeMap: Map<string, MapCell>;
+  static nodeMap: Map<string, MapCell>;
   static largestSize: number;
 
   constructor(
@@ -91,7 +91,6 @@ export class MapCell {
     s: Coordinate,
     q: Coordinate,
     content: CellContent,
-    nodeMap: Map<string, MapCell>,
     dice: 1 | 2 | 3 | 4 | 5 | 6
   ) {
     this.q = q;
@@ -103,8 +102,10 @@ export class MapCell {
     this.size = 1;
     this.parent = null;
     this.name = `${r}|${s}|${q}`;
-    this.nodeMap = nodeMap;
-    this.nodeMap.set(`${r}|${s}|${q}`, this);
+    if (!MapCell.nodeMap) {
+      MapCell.nodeMap = new Map<string, MapCell>();
+    }
+    MapCell.nodeMap.set(`${r}|${s}|${q}`, this);
   }
 
   find() {
@@ -119,8 +120,8 @@ export class MapCell {
   static union(el1: MapCell, el2: MapCell) {
     const tag1 = el1.find();
     const tag2 = el2.find();
-    const finalParent1 = el1.nodeMap.get(tag1);
-    const finalParent2 = el2.nodeMap.get(tag2);
+    const finalParent1 = MapCell.nodeMap.get(tag1);
+    const finalParent2 = MapCell.nodeMap.get(tag2);
     if (tag1 === tag2) {
       return;
     } else if (finalParent1 && finalParent2) {
@@ -145,7 +146,6 @@ export function generateMap() {
   while (true) {
     const randomizedTileList = shuffle(cellList);
     duchyMap = [];
-    const allCells = new Map<string, MapCell>();
     const allDices: number[] = [];
 
     let index = 0;
@@ -168,7 +168,6 @@ export function generateMap() {
                 s as Coordinate,
                 q as Coordinate,
                 randomizedTileList[index],
-                allCells,
                 dice
               )
             );
@@ -178,10 +177,7 @@ export function generateMap() {
         }
       }
     }
-    if (
-      checkDuchyMap(duchyMap, allCells) <= 8 &&
-      findVariance(allDices) > 1.4
-    ) {
+    if (checkDuchyMap(duchyMap) <= 8 && findVariance(allDices) > 1.4) {
       break;
     }
   }
@@ -193,15 +189,17 @@ function findVariance(arr: number[]) {
   return arr.reduce((acc, curr) => acc + (curr - mean) ** 2, 0) / arr.length;
 }
 
-function checkDuchyMap(arr: MapCell[], allCells: Map<string, MapCell>) {
+function checkDuchyMap(arr: MapCell[]) {
   MapCell.largestSize = 1;
   for (let i = 0; i < arr.length; i++) {
-    const currentNode = allCells.get(`${arr[i].r}|${arr[i].s}|${arr[i].q}`);
+    const currentNode = MapCell.nodeMap.get(
+      `${arr[i].r}|${arr[i].s}|${arr[i].q}`
+    );
     if (currentNode?.content !== "city") {
       continue;
     }
     for (let d = 0; d < hexDirections.length; d++) {
-      const targetNode = allCells.get(
+      const targetNode = MapCell.nodeMap.get(
         `${arr[i].r + hexDirections[d][0]}|${arr[i].s + hexDirections[d][1]}|${
           arr[i].q + hexDirections[d][2]
         }`
