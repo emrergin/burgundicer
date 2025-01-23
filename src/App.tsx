@@ -17,6 +17,7 @@ export function RiHexagonLine(props: SVGProps<SVGSVGElement>) {
       width="120px"
       height="120px"
       viewBox="0 0 24 24"
+      className="hexagon-svg"
       {...props}
     >
       <path
@@ -28,15 +29,15 @@ export function RiHexagonLine(props: SVGProps<SVGSVGElement>) {
 }
 
 function generateCellImage(cell: MapCell, index: number) {
-  // if()
-
   return (
     <div className="hexagon" key={index}>
       <RiHexagonLine style={{ color: colors[cell.content] }} />
       <img
         src={[dice1, dice2, dice3, dice4, dice5, dice6][cell.dice - 1]}
         className="dice"
-        style={{ backgroundColor: colors[cell.content] }}
+        style={{
+          backgroundColor: colors[cell.content],
+        }}
       />
     </div>
   );
@@ -51,42 +52,54 @@ function App() {
           setMap(generateMap());
         }}
       >
-        Generate Map
+        {duchyMap.length > 0 ? "Reg" : "G"}enerate Map
       </button>
-      <div className="map-row">
-        {duchyMap
-          .filter((c) => c.r === -3)
-          .map((c, index) => generateCellImage(c, index))}
-      </div>
-      <div className="map-row">
-        {duchyMap
-          .filter((c) => c.r === -2)
-          .map((c, index) => generateCellImage(c, index))}
-      </div>
-      <div className="map-row">
-        {duchyMap
-          .filter((c) => c.r === -1)
-          .map((c, index) => generateCellImage(c, index))}
-      </div>
-      <div className="map-row">
-        {duchyMap
-          .filter((c) => c.r === 0)
-          .map((c, index) => generateCellImage(c, index))}
-      </div>
-      <div className="map-row">
-        {duchyMap
-          .filter((c) => c.r === 1)
-          .map((c, index) => generateCellImage(c, index))}
-      </div>
-      <div className="map-row">
-        {duchyMap
-          .filter((c) => c.r === 2)
-          .map((c, index) => generateCellImage(c, index))}
-      </div>
-      <div className="map-row">
-        {duchyMap
-          .filter((c) => c.r === 3)
-          .map((c, index) => generateCellImage(c, index))}
+
+      {duchyMap.length > 0 && (
+        <button
+          onClick={() => {
+            window.print();
+          }}
+        >
+          Print
+        </button>
+      )}
+      <div id="section-to-print">
+        <div className="map-row">
+          {duchyMap
+            .filter((c) => c.r === -3)
+            .map((c, index) => generateCellImage(c, index))}
+        </div>
+        <div className="map-row">
+          {duchyMap
+            .filter((c) => c.r === -2)
+            .map((c, index) => generateCellImage(c, index))}
+        </div>
+        <div className="map-row">
+          {duchyMap
+            .filter((c) => c.r === -1)
+            .map((c, index) => generateCellImage(c, index))}
+        </div>
+        <div className="map-row">
+          {duchyMap
+            .filter((c) => c.r === 0)
+            .map((c, index) => generateCellImage(c, index))}
+        </div>
+        <div className="map-row">
+          {duchyMap
+            .filter((c) => c.r === 1)
+            .map((c, index) => generateCellImage(c, index))}
+        </div>
+        <div className="map-row">
+          {duchyMap
+            .filter((c) => c.r === 2)
+            .map((c, index) => generateCellImage(c, index))}
+        </div>
+        <div className="map-row">
+          {duchyMap
+            .filter((c) => c.r === 3)
+            .map((c, index) => generateCellImage(c, index))}
+        </div>
       </div>
       <div className="footer">
         <a href="https://github.com/emrergin/burgundicer" target="_blank">

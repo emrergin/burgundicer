@@ -83,6 +83,12 @@ button:focus-visible {
   left: 34px;
   top: 34px;
 }
+
+#section-to-print {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

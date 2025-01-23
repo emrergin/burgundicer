@@ -17,3 +17,26 @@
 .card {
   padding: 2em;
 }
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    visibility: hidden;
+  }
+  #section-to-print {
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    top: 10cm;
+    height: 210mm;
+    width: 297mm;
+  }
+
+  #section-to-print {
+    transform: scale(1.184);
+  }
+}
