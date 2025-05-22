@@ -12,6 +12,8 @@
   left: 0px;
   background-color: rgb(69, 80, 90);
   width: 100vw;
+  z-index: 30;
+  height: 30px;
 }
 
 .card {
@@ -38,5 +40,18 @@
 
   #section-to-print {
     transform: scale(1.184);
+  }
+}
+
+@media screen and (max-width: 720px) {
+  #root {
+    max-width: 100vw;
+    padding: 0rem;
+    min-height: 100vh;
+  }
+
+  #section-to-print {
+    zoom: 0.5;
+    z-index: 1;
   }
 }

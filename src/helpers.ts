@@ -178,7 +178,7 @@ export function generateMap() {
         }
       }
     }
-    if (checkDuchyMap(duchyMap) <= 8 && findVariance(allDices) > 1.4) {
+    if (getLargestGroupSize(duchyMap) <= 8 && findVariance(allDices) > 1.4) {
       break;
     }
   }
@@ -190,7 +190,7 @@ function findVariance(arr: number[]) {
   return arr.reduce((acc, curr) => acc + (curr - mean) ** 2, 0) / arr.length;
 }
 
-function checkDuchyMap(arr: MapCell[]) {
+function getLargestGroupSize(arr: MapCell[]) {
   MapCell.largestSize = 1;
   for (let i = 0; i < arr.length; i++) {
     const currentNode = MapCell.nodeMap.get(
