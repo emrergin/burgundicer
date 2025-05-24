@@ -66,6 +66,8 @@ export const colors = {
 };
 
 type Coordinate = -3 | -2 | -1 | 0 | 1 | 2 | 3;
+type Dice = 1 | 2 | 3 | 4 | 5 | 6;
+
 type CellContent =
   | "water"
   | "castle"
@@ -79,7 +81,7 @@ export class MapCell {
   s: Coordinate;
   r: Coordinate;
   content: CellContent;
-  dice: 1 | 2 | 3 | 4 | 5 | 6;
+  dice: Dice;
   size: number;
   parent: null | MapCell;
   name: string;
@@ -91,7 +93,7 @@ export class MapCell {
     s: Coordinate,
     q: Coordinate,
     content: CellContent,
-    dice: 1 | 2 | 3 | 4 | 5 | 6
+    dice: Dice
   ) {
     this.q = q;
     this.s = s;
@@ -144,10 +146,18 @@ export class MapCell {
 export function generateMap() {
   let duchyMap = [];
   MapCell.nodeMap = new Map<string, MapCell>();
+  let allDices: Dice[] = [];
+  do {
+    allDices = [];
+    for (let i = 0; i < 37; i++) {
+      const dice = (Math.floor(Math.random() * 6) + 1) as Dice;
+      allDices.push(dice);
+    }
+  } while (findVariance(allDices) < 1.4);
+
   while (true) {
     const randomizedTileList = shuffle(cellList);
     duchyMap = [];
-    const allDices: number[] = [];
 
     let index = 0;
     for (let r = -3; r <= 3; r++) {
@@ -156,29 +166,21 @@ export function generateMap() {
           if (r + s + q !== 0) {
             continue;
           } else {
-            const dice = (Math.floor(Math.random() * 6) + 1) as
-              | 1
-              | 2
-              | 3
-              | 4
-              | 5
-              | 6;
             duchyMap.push(
               new MapCell(
                 r as Coordinate,
                 s as Coordinate,
                 q as Coordinate,
                 randomizedTileList[index],
-                dice
+                allDices[index]
               )
             );
-            allDices.push(dice);
             index++;
           }
         }
       }
     }
-    if (getLargestGroupSize(duchyMap) <= 8 && findVariance(allDices) > 1.4) {
+    if (getLargestGroupSize(duchyMap) <= 8) {
       break;
     }
   }
