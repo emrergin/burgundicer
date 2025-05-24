@@ -7,6 +7,7 @@ This tool generates random maps to play with [the Castles of Burgundy](https://b
 - Ensures the tile count is accurate.
 - Ensures dice pips have at least some mediocre level of variance.
 - Ensures no city area has more than 8 hexes.
+- Ensures there is at least a size 3 pasture.
 
 ## Sources:
 

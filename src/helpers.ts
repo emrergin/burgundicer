@@ -87,6 +87,7 @@ export class MapCell {
   name: string;
   static nodeMap: Map<string, MapCell>;
   static largestSize: number;
+  static largestPasture: number;
 
   constructor(
     r: Coordinate,
@@ -139,6 +140,13 @@ export class MapCell {
         finalParent2.size,
         MapCell.largestSize
       );
+      if (finalParent1.content === "livestock") {
+        MapCell.largestPasture = Math.max(
+          finalParent1.size,
+          finalParent2.size,
+          MapCell.largestPasture
+        );
+      }
     }
   }
 }
@@ -180,7 +188,8 @@ export function generateMap() {
         }
       }
     }
-    if (getLargestGroupSize(duchyMap) <= 8) {
+    const duchyValues = getDuchyValues(duchyMap);
+    if (duchyValues.largestCity <= 8 && duchyValues.largestPasture >= 3) {
       break;
     }
   }
@@ -192,13 +201,17 @@ function findVariance(arr: number[]) {
   return arr.reduce((acc, curr) => acc + (curr - mean) ** 2, 0) / arr.length;
 }
 
-function getLargestGroupSize(arr: MapCell[]) {
+function getDuchyValues(arr: MapCell[]) {
   MapCell.largestSize = 1;
+  MapCell.largestPasture = 1;
   for (let i = 0; i < arr.length; i++) {
     const currentNode = MapCell.nodeMap.get(
       `${arr[i].r}|${arr[i].s}|${arr[i].q}`
     );
-    if (currentNode?.content !== "city") {
+    if (
+      currentNode?.content !== "city" &&
+      currentNode?.content !== "livestock"
+    ) {
       continue;
     }
     for (let d = 0; d < hexDirections.length; d++) {
@@ -217,5 +230,8 @@ function getLargestGroupSize(arr: MapCell[]) {
       }
     }
   }
-  return MapCell.largestSize;
+  return {
+    largestCity: MapCell.largestSize,
+    largestPasture: MapCell.largestPasture,
+  };
 }
